@@ -26,7 +26,9 @@ class Segment {
     fun pop(): Segment? {
         val result = if (next !== this) {
             next
-        } else null
+        } else {
+            null
+        }
         prev!!.next = next
         next!!.prev = prev
         next = null
@@ -37,7 +39,7 @@ class Segment {
     fun push(seg: Segment): Segment {
         seg.next = next
         seg.prev = this
-        next!!.prev = this
+        next!!.prev = seg
         next = seg
         return seg
     }

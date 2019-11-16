@@ -60,8 +60,8 @@ class Buffer : Sink, BufferedSource {
     override fun readByteArray(bytesCount: Long): ByteArray {
         val result = ByteArray(bytesCount.toInt())
         var offset = 0
-        while (offset < size) {
-            val read = read(result, offset, size - offset)
+        while (offset < bytesCount) {
+            val read = read(result, offset, bytesCount - offset)
             if (read == -1) {
                 throw EOFException()
             }
