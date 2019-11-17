@@ -5,7 +5,7 @@ import java.io.EOFException
 import java.nio.charset.Charset
 
 
-class Buffer : Sink, BufferedSource {
+class Buffer : BufferedSink, BufferedSource {
 
     internal var head: Segment? = null
     internal var size: Long = 0
@@ -82,6 +82,47 @@ class Buffer : Sink, BufferedSource {
             SegmentPool.recycle(s)
         }
         return toCopy
+    }
+
+    override fun writeString(data: String, charset: Charset): BufferedSink = writeString(data, 0, data.length, charset)
+
+    override fun writeString(string: String, beginIndex: Int, endIndex: Int, charset: Charset): Buffer {
+        val data = string.substring(beginIndex, endIndex).toByteArray(charset)
+        return write(data, 0, data.size)
+    }
+
+    override fun write(data: ByteArray, offset: Int, bytesCount: Int): Buffer {
+        var tmpOffset = offset
+        val limit = offset + bytesCount
+        while (tmpOffset < bytesCount) {
+            val tail = writeableSegment(1)
+            val toCopy = minOf(limit - tmpOffset, Segment.SIZE - tail.limit)
+            data.copyInto(
+                destination = tail.data,
+                destinationOffset = tail.limit,
+                startIndex = tmpOffset,
+                endIndex = tmpOffset + toCopy
+            )
+            tmpOffset += toCopy
+            tail.limit += toCopy
+        }
+        size += bytesCount.toLong()
+        return this
+    }
+
+    override fun emitCompleteSegments(): BufferedSink = this
+
+    fun completeSegmentByteCount(): Long {
+        var res = size
+        if (res == 0L) {
+            return res
+        }
+
+        val tail = head!!.prev!!
+        if (tail.limit < Segment.SIZE) {
+            res -= (tail.limit - tail.pos).toLong()
+        }
+        return res
     }
 
     fun writeAll(source: Source): Long {

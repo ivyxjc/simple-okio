@@ -13,5 +13,8 @@ the lib. It may be difficult to the developer to read the source codes.
 - [x] Segment (not include Shared Segment)
 - [x] Segment Pool
 
+### V0.2
+- [x] write data into InputStream and File (writeString(...))
+
 
 

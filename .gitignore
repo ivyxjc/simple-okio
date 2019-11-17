@@ -38,4 +38,6 @@ out/
 build/
 logs/
 
+test-outputs/
+
 private.properties
