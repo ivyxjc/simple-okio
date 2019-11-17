@@ -1,6 +1,5 @@
-package ivyio.internal
+package ivyio
 
-import ivyio.Source
 import java.nio.charset.Charset
 
 

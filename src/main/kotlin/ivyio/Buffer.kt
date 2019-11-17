@@ -1,6 +1,5 @@
 package ivyio
 
-import ivyio.internal.BufferedSource
 import java.io.EOFException
 import java.nio.charset.Charset
 
