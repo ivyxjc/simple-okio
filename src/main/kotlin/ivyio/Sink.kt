@@ -6,7 +6,7 @@ import java.io.IOException
 
 interface Sink : Closeable, Flushable {
     @Throws(IOException::class)
-    fun write(source: Buffer, byteCount: Long)
+    fun write(source: Buffer, bytesCount: Long)
 
     @Throws(IOException::class)
     override fun flush()
@@ -16,3 +16,5 @@ interface Sink : Closeable, Flushable {
     @Throws(IOException::class)
     override fun close()
 }
+
+fun Sink.buffer() = RealBufferedSink(this)

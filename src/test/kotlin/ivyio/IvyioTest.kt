@@ -34,4 +34,23 @@ class IvyioTest {
         println(res)
         Assert.assertEquals(expected, res)
     }
+
+    @Test
+    fun testWriteToFile() {
+        val file = File("src\\test\\resources\\test-outputs\\output.txt")
+        val sink = file.sink()
+        val bufferedSink = sink.buffer()
+        val res = bufferedSink.writeString("Hello world", Charsets.UTF_8)
+        bufferedSink.flush()
+    }
+
+    @Test
+    fun testWriteToFile2() {
+        val file = File("src\\test\\resources\\test-outputs\\output.txt")
+        Assert.assertNotNull(file)
+        val sink = file.sink()
+        val bufferedSink = sink.buffer()
+        val res = bufferedSink.writeString("Hello world,你好世界\n".repeat(5000), Charsets.UTF_8)
+        bufferedSink.flush()
+    }
 }
